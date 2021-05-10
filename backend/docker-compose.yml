@@ -1,0 +1,32 @@
+services:
+  database:
+    image: postgres:latest
+    container_name: 'sds3_database'
+    environment:
+      - POSTGRES_DB=dsvendas
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234567
+      - TZ=GMT
+    volumes:
+      - './data/postgres:/var/lib/postgresql/data'
+    ports:
+      - 5432:5432
+    networks:
+      - postgres-compose-network
+
+  dbAdmin:
+    image: dpage/pgadmin4
+    container_name: 'sds3_pgAdmin4'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'pgadmin@admin.com'
+      PGADMIN_DEFAULT_PASSWORD: 'teste123'
+    ports:
+      - 5433:80
+    depends_on:
+      - database
+    networks:
+      - postgres-compose-network
+
+networks:
+  postgres-compose-network:
+    driver: bridge
